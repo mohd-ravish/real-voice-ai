@@ -1,0 +1,18 @@
+node_modules/
+uploads/*.wav
+uploads/*.mp3
+uploads/*.webm
+uploads/*.ogg
+uploads/*.m4a
+.env
+.env.local
+.env.production
+*.log
+logs/
+.DS_Store
+venv/
+__pycache__/
+*.pyc
+
+# Documentation folder
+documentation/
