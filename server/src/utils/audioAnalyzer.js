@@ -8,19 +8,25 @@ const path = require('path');
  */
 function analyzeAudio(audioPath) {
   return new Promise((resolve, reject) => {
+    const fs = require('fs');
     const pythonScript = path.join(__dirname, 'analyze_audio.py');
     const modelPath = process.env.MODEL_PATH || path.join(__dirname, '../../catboost_model.pkl');
     
-    // Auto-detect Python path based on environment
+    // Auto-detect Python path based on environment and OS
     let pythonPath = process.env.PYTHON_PATH;
     if (!pythonPath) {
-      // Check if virtual environment exists (production)
-      const venvPath = path.join(__dirname, '../../venv/bin/python3');
-      const fs = require('fs');
-      if (fs.existsSync(venvPath)) {
-        pythonPath = venvPath;
+      // Determine the correct venv path based on OS
+      const isWindows = process.platform === 'win32';
+      const venvPython = isWindows 
+        ? path.join(__dirname, '../../venv/Scripts/python.exe')
+        : path.join(__dirname, '../../venv/bin/python3');
+      
+      // Check if virtual environment exists
+      if (fs.existsSync(venvPython)) {
+        pythonPath = venvPython;
       } else {
-        pythonPath = 'python'; // Fallback to system python
+        // Fallback to system python
+        pythonPath = isWindows ? 'python' : 'python3';
       }
     }
 
